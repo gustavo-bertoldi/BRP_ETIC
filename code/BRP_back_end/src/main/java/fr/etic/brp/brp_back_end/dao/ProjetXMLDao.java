@@ -32,6 +32,7 @@ public class ProjetXMLDao {
     
     public Document ObtenirDocument(String uri){
         Document xml = null;
+        System.out.println("uri -------- "+uri);
         try {
             DocumentBuilder builder = DomUtil.obtenirBuilder();
             //création de notre objet d'erreurs pour le XML

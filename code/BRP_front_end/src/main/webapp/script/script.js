@@ -1,3 +1,5 @@
+
+
 /*************** Variables globales ******************/
 
 test_select_descriptif = false; //permet de ne pas supprimer la selection d'un element à peine faite
@@ -13,9 +15,9 @@ $(document).ready(function () {
     url: "./ActionServlet",
     method: "GET",
     data: {
-      todo: "affichageAdmin",
+      todo: "affichageAdmin"
     },
-    dataType: "json",
+    dataType: "json"
   }).done(function (response) {
     // Fonction appelée en cas d'appel AJAX réussi
     //console.log("Response", response);
@@ -34,9 +36,9 @@ $(document).ready(function () {
     url: "./ActionServlet",
     method: "GET",
     data: {
-      todo: "listerRaccordementCatConst",
+      todo: "listerRaccordementCatConst"
     },
-    dataType: "json",
+    dataType: "json"
   }).done(function (response) {
     // Fonction appelée en cas d'appel AJAX réussi
     //console.log("Response", response);
@@ -48,7 +50,7 @@ $(document).ready(function () {
             value: coeffRaccordement.id,
             text:
               coeffRaccordement.localisation + " - " + coeffRaccordement.valeur,
-            name: coeffRaccordement.localisation,
+            name: coeffRaccordement.localisation
           })
         );
       });
@@ -63,7 +65,7 @@ $(document).ready(function () {
               categorieConstruction.code +
               " - " +
               categorieConstruction.intitule,
-            name: categorieConstruction.code,
+            name: categorieConstruction.code
           })
         );
       });
@@ -75,9 +77,9 @@ $(document).ready(function () {
     url: "./ActionServlet",
     method: "GET",
     data: {
-      todo: "arboDescriptifs",
+      todo: "arboDescriptifs"
     },
-    dataType: "json",
+    dataType: "json"
   })
     .done(function (response) {
       // Fonction appelée en cas d'appel AJAX réussi
@@ -231,9 +233,9 @@ function createProject() {
     method: "POST",
     data: {
       todo: "creationProjet",
-      nomProjet: nomProjet,
+      nomProjet: nomProjet
     },
-    dataType: "json",
+    dataType: "json"
   }).done(function (response) {
     // Fonction appelée en cas d'appel AJAX réussi
     //console.log("Response", response);
@@ -448,12 +450,11 @@ function ouvrirProjet(idProjet) {
     method: "GET",
     data: {
       todo: "ouvrirProjet",
-      idProjet: idProjet,
+      idProjet: idProjet
     },
-    dataType: "json",
+    dataType: "json"
   }).done(function (response) {
     // Fonction appelée en cas d'appel AJAX réussi
-    console.log(response);
     if (!response.ErrorState) {
       var xslDocumentUrl = "stylesheet/ouvrirProjet.xsl";
       var xmlDocumentUrl = "XMLfiles/" + idProjet + ".xml";
@@ -859,23 +860,29 @@ function GenererLivrable() {
   //   idProjet +
   //   ".xml";
   var uriXML =
-    "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/XMLfiles/" +
+    "C:\\Users\\brplyon\\Documents\\Gustavo - Debug\\BRP_ETIC\\code\\BRP_front_end\\src\\main\\webapp\\XMLfiles\\" +
     idProjet +
     ".xml";
   
   var choixTemplate = 1;
-
+  console.log("Appel a GenererLivrable")
   $.ajax({
     url: "./ActionServlet",
-    method: "GET",
+    method: "POST",
     data: {
       todo: "genererLivrable",
       idProjet: idProjet,
       choixTemplate: choixTemplate,
-      uriXML: uriXML,
+      uriXML: uriXML
     },
-    dataType: "json",
+    dataType: "json"
   }).done(function (response) {
+      console.log(response);
+      
+      var blob = new Blob(response, {type: "application/octet-stream"});
+      console.log(blob);
+      saveAs(blob, "livrables.zip");
+      
     // Fonction appelée en cas d'appel AJAX réussi
     //console.log("Response", response);
     if (!response.ErrorState) {
@@ -887,6 +894,9 @@ function GenererLivrable() {
       //On previent l'opérateur que l'export a échoué
       alert("Erreur lors de la génération du livrable");
     }
+  }).fail((xhr) => {
+    console.log("fail");
+    console.log(xhr);
   });
 }
 

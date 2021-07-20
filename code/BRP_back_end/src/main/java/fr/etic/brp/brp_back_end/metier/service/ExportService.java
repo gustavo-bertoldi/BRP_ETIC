@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -56,11 +57,12 @@ public class ExportService {
     protected ProjetDao projetDao = new ProjetDao();
     
     //protected String rootXMLFiles = "../../../../code/BRP_front_end/src/main/webapp/XMLfiles/";
-    protected String rootXMLFiles = "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/XMLfiles/"; 
+    protected String rootXMLFiles = "C:\\Users\\brplyon\\Documents\\Gustavo - Debug\\BRP_ETIC\\code\\BRP_front_end\\target\\BRP_front_end-1.0-SNAPSHOT\\XMLfiles"; 
+    //protected String rootXMLFiles = "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/XMLfiles/"; 
     //protected String rootXMLFiles = "/usr/local/Cellar/tomcat/9.0.41/libexec/webapps/BRP_front_end-1.0-SNAPSHOT/XMLfiles/";
 
     //protected String rootExportFiles = "/usr/local/Cellar/tomcat/9.0.41/libexec/webapps/BRP_front_end-1.0-SNAPSHOT/export_files/";
-    protected String rootExportFiles = "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/export_files/";
+    protected String rootExportFiles = "C:\\Users\\brplyon\\Documents\\Gustavo - Debug\\BRP_ETIC\\code\\BRP_front_end\\src\\main\\webapp\\export_files\\";
 
     private final static TreeMap<Integer, String> map = new TreeMap<Integer, String>();
     static {
@@ -87,9 +89,13 @@ public class ExportService {
         return map.get(l) + toRoman(number-l);
     }
     
-    public Boolean ExporterProjet(Long idProjet, int choixTemplate, String uriXML) {
+    public ArrayList<String> ExporterProjet(Long idProjet, int choixTemplate, String uriXML) {
+       
         DomUtil.init();
-        Boolean resultat = false;
+        ArrayList<String> resultat = new ArrayList<>();
+      
+        
+        System.out.println("URI XML 2222 ------- "+uriXML);
         
         Map<String, String> template1 = new HashMap<>();
         template1.put("titre1", "Titre1");
@@ -103,6 +109,8 @@ public class ExportService {
         //Utile quand on veut RM le dossier si erreur
         String nomProjet = null;
         Boolean dossierCree = false;
+        
+        System.out.println("Dossier -- - - - - "+rootExportFiles+"Exports/"+ "" + "_" + idProjet);
 
         try {
             //Obtention du document XML
@@ -182,6 +190,7 @@ public class ExportService {
             
             //on supprime si existe avant
             nomProjet = projet.getNomProjet();
+            
             File index = new File(rootExportFiles+"Exports/"+ nomProjet + "_" + idProjet);
             if(index.exists()){
                 String[]entries = index.list();
@@ -192,7 +201,7 @@ public class ExportService {
                 index.delete();
             }
 
-            //On créer le dossier d'export du Projet            
+            //On créer le dossier d'export du Projet
             Boolean succesCreationDossier = (new File(rootExportFiles+"Exports/"+ nomProjet + "_" + idProjet)).mkdirs();
             if (!succesCreationDossier) {
                 throw new Exception();
@@ -339,6 +348,7 @@ public class ExportService {
                 word.write(out);
                 out.close();
                 word.close();
+                resultat.add(outputCCTP);
             }
             
             //TRAITEMENT EXCEL
@@ -718,11 +728,11 @@ public class ExportService {
             OutputStream fileOut = new FileOutputStream(outputDPGF);
             excel.write(fileOut);
             
-            resultat = true; //Si on est arrivé jusque là alors pas d'erreur
+            resultat.add(outputDPGF);
             
         } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ExporterProjet(Long idProjet, int choixTemplate, String uriXML)", ex);
-            resultat = false;
+            Logger.getAnonymousLogger().log(Level.WARNING, ex.toString());
+            resultat.clear();
             //RM le dossier crée
             if(dossierCree) {
                 try {
