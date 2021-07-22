@@ -865,23 +865,43 @@ function GenererLivrable() {
     ".xml";
   
   var choixTemplate = 1;
-  console.log("Appel a GenererLivrable")
+  console.log("Appel a GenererLivrable");
+  
+  //Fait avec XMLHttpRequest pour ne pas corrompre le fichier zip
+  var http = new XMLHttpRequest();
+  var params = encodeURI("todo=genererLivrable&idProjet="+idProjet+"&choixTemplate="+choixTemplate+"&uriXML="+uriXML);
+  http.responseType = "arraybuffer";
+  http.open("GET", "./ActionServlet?"+params , true);
+  http.responseType = "blob";
+  http.onload = function (e) {
+      if (this.status == 200) {
+          var data = this.response;
+          alert('La génération du livrable a réussie, vous le retrouverez dans le dossier "exportFiles" de votre application');
+          saveAs(new Blob([data], {type: "application/zip"}), "livrables.zip");
+      } else {
+          //On previent l'opérateur que l'export a échoué
+        alert("Erreur lors de la génération du livrable");
+      }
+  }
+  http.send(params);
+  
+  /*
   $.ajax({
     url: "./ActionServlet",
-    method: "POST",
+    method: "GET",
     data: {
       todo: "genererLivrable",
       idProjet: idProjet,
       choixTemplate: choixTemplate,
       uriXML: uriXML
     },
-    dataType: "json"
+    dataType: "text",
+    contentType: "application/zip"
   }).done(function (response) {
-      console.log(response);
-      
-      var blob = new Blob(response, {type: "application/octet-stream"});
-      console.log(blob);
-      saveAs(blob, "livrables.zip");
+      saveAs(new Blob([response], {type: "application/zip"}), "livrables.zip");
+      //var blob = new Blob(response, {type: "application/octet-stream"});
+      //console.log(blob);
+      //saveAs(blob, "livrables.zip");
       
     // Fonction appelée en cas d'appel AJAX réussi
     //console.log("Response", response);
@@ -895,9 +915,10 @@ function GenererLivrable() {
       alert("Erreur lors de la génération du livrable");
     }
   }).fail((xhr) => {
-    console.log("fail");
+    console.log("Erreur de communication avec le serveur");
     console.log(xhr);
   });
+    */
 }
 
 /****************** Fonctions (partie droite) *********************/

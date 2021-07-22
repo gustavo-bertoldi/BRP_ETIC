@@ -342,7 +342,7 @@ public class ExportService {
                     }
                 }
                 //On nomme la CCTP
-                String outputCCTP = rootExportFiles+"Exports/" + projet.getNomProjet() + "_" + projet.getIdProjet() + "/" + projet.getNomProjet() + "_LOT_" + h + "_" + baliseLot.getAttribute("intitule") + ".docx"; //Surement à changer lors de l'installation client
+                String outputCCTP = rootExportFiles+"Exports\\" + projet.getNomProjet() + "_" + projet.getIdProjet() + "\\" + projet.getNomProjet() + "_LOT_" + h + "_" + baliseLot.getAttribute("intitule") + ".docx"; //Surement à changer lors de l'installation client
                 //On écrit en sortie le document WORD
                 FileOutputStream out = new FileOutputStream(outputCCTP);
                 word.write(out);
@@ -722,7 +722,7 @@ public class ExportService {
             //FIN //NB : (PAS après "Fait à" inclus)
             
             //On nomme la DPGF
-            String outputDPGF = rootExportFiles+"Exports/" + projet.getNomProjet() + "_" + projet.getIdProjet() + "/" + projet.getNomProjet() + "_DPGF.xlsx"; //Surement à changer lors de l'installation client
+            String outputDPGF = rootExportFiles+"Exports\\" + projet.getNomProjet() + "_" + projet.getIdProjet() + "\\" + projet.getNomProjet() + "_DPGF.xlsx"; //Surement à changer lors de l'installation client
 
             //On écrit en sortie le document EXCEL
             OutputStream fileOut = new FileOutputStream(outputDPGF);
@@ -790,6 +790,7 @@ public class ExportService {
             }
             DomUtil.destroy();
         }
+        System.out.println("Resultat : "+resultat.toString());
         return resultat;
     }
     

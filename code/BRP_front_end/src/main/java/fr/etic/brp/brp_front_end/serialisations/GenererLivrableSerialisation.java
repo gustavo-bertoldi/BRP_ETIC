@@ -26,68 +26,63 @@ public class GenererLivrableSerialisation extends Serialisation {
     @Override
     public void serialiser(HttpServletRequest request, HttpServletResponse response) throws IOException {
         
-        JsonObject container = new JsonObject(); //Objet "conteneur JSON" pour structurer les données à sérialiser
+        ArrayList<String> fichiers = (ArrayList<String>)request.getAttribute("fichiers");
+        if (fichiers == null || fichiers.isEmpty()) return;
         
-        //Lecture des attributs de la requête (stockés par l'action)
-        boolean ErrorState = (boolean)request.getAttribute("ErrorState");
+        final String cheminDossier = fichiers.get(0).substring(0, fichiers.get(0).lastIndexOf("\\"));
+        final String nomFichier = "livrables.zip";
+        final String cheminLivrable = cheminDossier + "\\" + nomFichier;
+        final int STREAM_SIZE = 1024;
         
-        container.addProperty("Error", ErrorState);
-        
-        String cheminLivrable = null;
-
-        try {
-            ArrayList<String> fichiers = (ArrayList<String>) request.getAttribute("fichiers");
-            String cheminDossier = fichiers.get(0).substring(0, fichiers.get(0).lastIndexOf("/") + 1);
-            byte[] buffer = new byte[1024];
-            FileOutputStream fos = new FileOutputStream(cheminDossier + "livrables.zip");
-            ZipOutputStream zos = new ZipOutputStream(fos);
-        
-        
+        try (FileOutputStream fos = new FileOutputStream(cheminLivrable);
+                ZipOutputStream zos = new ZipOutputStream(fos)) {
+            
+            byte[] buffer = new byte[STREAM_SIZE];
+            
             for (String cheminFichier : fichiers) {
-                System.out.println(cheminFichier);
                 File f = new File(cheminFichier);
-                InputStream fis = new FileInputStream(f);
-                zos.putNextEntry(new ZipEntry(f.getName()));
-                int length;
-                while ((length = fis.read(buffer)) > 0) {
-                    zos.write(buffer, 0, length);
+                
+                try (InputStream fis = new FileInputStream(f)) {
+                    ZipEntry ze = new ZipEntry(f.getName());
+                    zos.putNextEntry(ze);
+                    int read;
+                    while ((read = fis.read(buffer)) > 0) {
+                        zos.write(buffer, 0, read);
+                    }
+                    zos.closeEntry();
+                } catch (Exception e) {
+                    System.out.println("Erreur lors de la création du fichier zip : "+e.toString());
+                    return;
                 }
-                zos.closeEntry();
-                fis.close();
             }
-            zos.close();
-            cheminLivrable = cheminDossier + "livrables.zip";
-            
-        } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println("Fichier zip crée");
         }
+
+        File fzip = new File(cheminLivrable);
+        response.setContentType("application/zip");
+        response.setContentLength((int)fzip.length());
+        response.addHeader("Content-Disposition", "attachment; filename=\""+nomFichier+"\"");
         
-        
-        if (cheminLivrable != null) {
-            File livrable = new File(cheminLivrable);
-            InputStream livrableFis = new FileInputStream(livrable);
+        try (InputStream is = new FileInputStream(fzip);
+                ServletOutputStream sos = response.getOutputStream();) {
             
-            response.setContentType("application/octet-stream");
-            response.setContentLength((int)livrable.length());
-            response.setHeader("Content-Disposition","attachment;filename=" + livrable.getName());
-            
-            OutputStream os = response.getOutputStream();
-            
-            byte[] bufferData = new byte[1024];
-            int read=0;
-            while((read = livrableFis.read(bufferData))!= -1){
-		os.write(bufferData, 0, read);
-            }
-            os.close();
-            livrableFis.close();
-            System.out.println("Fichier envoyé");
-        } else {
+            byte[] buffer = new byte[(int)fzip.length()];
+            is.read(buffer);
+            sos.write(buffer);
+            sos.flush();
+           
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l'envoie du fichier compressé : "+e.toString());
+        }
+
              //Formatage de la structure de données JSON => Ecriture sur le flux de sortie de la réponse
+            /*
             PrintWriter out = this.getWriter(response);
             Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
             gson.toJson(container, out);
             out.close();
-        }
+        */
+        
         
         
         
