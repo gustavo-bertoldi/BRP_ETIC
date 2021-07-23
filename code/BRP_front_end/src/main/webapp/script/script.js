@@ -210,8 +210,10 @@ function popUpNomProjet(sens, idProjet) {
   else {
     $("#popUpWindow").hide();
     $("#nomProjetInput").val("");
-    $("#container").css("filter", "blur(0px)");
+    $("#container").css("filter", "blur(0px)");  
   }
+  
+ 
 
   //on tente de duppliquer
   if (idProjet)
@@ -227,6 +229,8 @@ function popUpNomProjet(sens, idProjet) {
 /****************** Fonctions (partie gauche) *********************/
 function createProject() {
   var nomProjet = $("#nomProjetInput").val();
+  $('#btn-creerprojet-valider').html('Chargement ... ');
+  $('#btn-creerprojet-valider').attr('disabled','');
 
   $.ajax({
     url: "./ActionServlet",
@@ -241,7 +245,6 @@ function createProject() {
     //console.log("Response", response);
 
     //on ferme le popup
-    popUpNomProjet(false);
 
     if (response["Error"]) {
       alert("Une erreur est survenue, impossible de créer un nouveau projet");
@@ -250,6 +253,9 @@ function createProject() {
 
       setTimeout(function () {
         ouvrirProjet(response["idProjet"]); //code exécuté après 3 secondes : laisse le temps au serveur de créer le XML du projet
+        $('#btn-creerprojet-valider').html('Valider');
+        $('#btn-creerprojet-valider').removeAttr('disabled');
+        popUpNomProjet(false);
       }, delayInMilliseconds);
     }
   });
@@ -854,6 +860,8 @@ function display_manage_project() {
 }
 
 function GenererLivrable() {
+  $('#btn-generer-livrable').attr('disabled','');
+  $('#btn-generer-livrable').html('Chargement ...');
   var idProjet = $("#idProjetActuel").val();
   // var uriXML =
   //   "/usr/local/Cellar/tomcat/9.0.41/libexec/webapps/BRP_front_end-1.0-SNAPSHOT/XMLfiles/" +
@@ -874,9 +882,10 @@ function GenererLivrable() {
   http.open("GET", "./ActionServlet?"+params , true);
   http.responseType = "blob";
   http.onload = function (e) {
+      $('#btn-generer-livrable').removeAttr('disabled');
+      $('#btn-generer-livrable').html('Générer livrable'); 
       if (this.status == 200) {
           var data = this.response;
-          alert('La génération du livrable a réussie, vous le retrouverez dans le dossier "exportFiles" de votre application');
           saveAs(new Blob([data], {type: "application/zip"}), "livrables.zip");
       } else {
           //On previent l'opérateur que l'export a échoué

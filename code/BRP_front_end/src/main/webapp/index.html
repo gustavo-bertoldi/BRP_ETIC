@@ -33,7 +33,7 @@
         <h2>Page de connexion</h2>
       </div>
       <div class="login-form">
-        <form action="#">
+        <form>
           <div class="form-group">
             <input
               type="text"
@@ -55,6 +55,8 @@
               onclick="connexion()"
               class="btn btn-black"
               id="blogin_button"
+              type='button'
+              disabled
             >
               Connexion
             </button>
@@ -67,6 +69,20 @@
 </html>
 
 <script>
+    //Désactive le bouton si les champs utilisateur et mdp n'ont pas été saisis
+  $('div.form-group input').on('keyup', function () {
+      console.log($('#Email').val());
+      if ($('#Email').val() && $('#Password').val()) $('#blogin_button').removeAttr('disabled');
+      else $('#blogin_button').attr('disabled','');
+  });
+  
+  //Permet de déclencher l'événemlent de connexion en appuyant la touche entrée
+  $('div.form-group input').on('keypress', function (evt) {
+      const touche = (evt.keyCode ? evt.keyCode : evt.which);
+      if (touche == '13') $('#blogin_button:enabled').trigger('click');
+  });
+  
+    
   $.ajax({
     url: "./ActionServlet",
     method: "GET",
@@ -87,6 +103,8 @@
     // Récupération de la valeur des champs du formulaire
     var emailField = $("#Email").val();
     var passwordField = $("#Password").val();
+    $('#blogin_button').attr('disabled','');
+    $('#blogin_button').html('Chargement ...');
 
     $.ajax({
       url: "./ActionServlet",
@@ -94,9 +112,9 @@
       data: {
         todo: "connexion",
         email: emailField,
-        password: passwordField,
+        password: passwordField
       },
-      dataType: "json",
+      dataType: "json"
     }).done(function (response) {
       // Fonction appelée en cas d'appel AJAX réussi
       console.log("Response", response); // LOG dans Console Javascript
@@ -105,6 +123,9 @@
       } else {
         $("#error_notif").css("display", "block"); // Message pour le paragraphe de notification
       }
+    }).always(() => {
+        $('#blogin_button').removeAttr('disabled');
+        $('#blogin_button').html('Connexion'); 
     });
   }
 </script>

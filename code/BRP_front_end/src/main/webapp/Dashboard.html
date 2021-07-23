@@ -30,8 +30,8 @@
       <div class="popupNomProjet">
         <input type="text" id="nomProjetInput" placeholder="Nom du projet" />
         <div class="buttons">
-          <div class="button" onclick="popUpNomProjet(false)">Annuler</div>
-          <div class="button">Valider</div>
+          <button class="button" onclick="popUpNomProjet(false)">Annuler</button>
+          <button class="button" id='btn-creerprojet-valider' disabled>Valider</button>
         </div>
       </div>
       <div class="flex1"></div>
@@ -217,9 +217,9 @@
             />
             <span>Gestion bibliothèque</span>
           </label>
-          <div class="exportButton" onclick="GenererLivrable();">
+          <button class="exportButton" id='btn-generer-livrable' onclick="GenererLivrable();">
             <span>Générer livrable</span>
-          </div>
+          </button>
         </div>
       </div>
       <div class="container">
