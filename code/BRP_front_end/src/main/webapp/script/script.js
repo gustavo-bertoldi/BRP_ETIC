@@ -197,18 +197,31 @@ $(document).ready(function () {
 });
 
 /****************** Fonctions (popup) *********************/
+
+
+function popupGenererLivrable(afficher) {
+    if (afficher) {
+        $("#popUpWindow-genererlivrable").css('display', 'flex');
+        $("#container").css("filter", "blur(5px)");
+    } else {
+        $("#popUpWindow-genererlivrable").hide();
+        $("#nomLivrableInput").val('');
+        $("#container").css("filter", "blur(0px)");
+    }
+}
+
 function popUpNomProjet(sens, idProjet) {
   //On supprime les anciens events attachés aux boutons
   $(".popupNomProjet > .buttons > .button").off("click");
 
   //on le montre
   if (sens) {
-    $("#popUpWindow").css("display", "flex");
+    $("#popUpWindow-nouveauprojet").css("display", "flex");
     $("#container").css("filter", "blur(5px)");
   }
   //sinon on le cache
   else {
-    $("#popUpWindow").hide();
+    $("#popUpWindow-nouveauprojet").hide();
     $("#nomProjetInput").val("");
     $("#container").css("filter", "blur(0px)");  
   }
@@ -860,8 +873,11 @@ function display_manage_project() {
 }
 
 function GenererLivrable() {
-  $('#btn-generer-livrable').attr('disabled','');
-  $('#btn-generer-livrable').html('Chargement ...');
+    
+  const nomFichier = $('#nomLivrableInput').val() + ".zip";
+  
+  $('#btn-genererlivrable-valider').attr('disabled','');
+  $('#btn-genererlivrable-valider').html('Chargement ...');
   var idProjet = $("#idProjetActuel").val();
   // var uriXML =
   //   "/usr/local/Cellar/tomcat/9.0.41/libexec/webapps/BRP_front_end-1.0-SNAPSHOT/XMLfiles/" +
@@ -882,11 +898,13 @@ function GenererLivrable() {
   http.open("GET", "./ActionServlet?"+params , true);
   http.responseType = "blob";
   http.onload = function (e) {
-      $('#btn-generer-livrable').removeAttr('disabled');
-      $('#btn-generer-livrable').html('Générer livrable'); 
+      $('#btn-genererlivrable-valider').removeAttr('disabled');
+      $('#btn-genererlivrable-valider').html('Générer livrable');
+      popupGenererLivrable(false);
+      
       if (this.status == 200) {
           var data = this.response;
-          saveAs(new Blob([data], {type: "application/zip"}), "livrables.zip");
+          saveAs(new Blob([data], {type: "application/zip"}), nomFichier);
       } else {
           //On previent l'opérateur que l'export a échoué
         alert("Erreur lors de la génération du livrable");

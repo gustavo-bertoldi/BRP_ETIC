@@ -167,7 +167,7 @@ select {
 }
 
 /*      Popup           */
-#popUpWindow {
+.popUpWindow {
   display: none;
   position: absolute;
   top: 0;
@@ -178,7 +178,7 @@ select {
   flex-direction: column;
 }
 
-.popupNomProjet {
+.popupNomProjet, .popupNomLivrable {
   margin: auto;
   background-color: var(--background_1);
   width: 500px;
@@ -187,11 +187,11 @@ select {
   padding: 40px 30px 40px;
 }
 
-.popupNomProjet > .buttons {
+.popupNomProjet > .buttons, .popupNomLivrable > .buttons {
   display: flex;
 }
 
-#nomProjetInput {
+#nomProjetInput, #nomLivrableInput {
   border: solid;
   border-width: 1px;
   border-color: var(--border);
@@ -231,11 +231,13 @@ select {
     border: none;
 }
 
-.popupNomProjet > .buttons > .button:nth-child(1) {
+.popupNomProjet > .buttons > .button:nth-child(1),
+.popupNomLivrable > .buttons > .button:nth-child(1) {
   margin-right: 2.5%;
 }
 
-.popupNomProjet > .buttons > .button:nth-child(2) {
+.popupNomProjet > .buttons > .button:nth-child(2),
+.popupNomLivrable > .buttons > .button:nth-child(2) {
   margin-left: 2.5%;
 }
 

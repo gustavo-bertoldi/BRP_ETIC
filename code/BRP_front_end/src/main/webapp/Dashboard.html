@@ -25,7 +25,8 @@
     ></script>
   </head>
   <body>
-    <div id="popUpWindow">
+      
+    <div class="popUpWindow" id="popUpWindow-nouveauprojet">
       <div class="flex1"></div>
       <div class="popupNomProjet">
         <input type="text" id="nomProjetInput" placeholder="Nom du projet" />
@@ -36,6 +37,25 @@
       </div>
       <div class="flex1"></div>
     </div>
+      
+     
+    <div class="popUpWindow" id="popUpWindow-genererlivrable">
+      <div class="flex1"></div>
+      <div class="popupNomLivrable">
+        <input type="text" id="nomLivrableInput" placeholder="Nom du fichier à télécharger" />
+        <div class="buttons">
+          <button class="button" onclick="popupGenererLivrable(false)">Annuler</button>
+          <button class="button" id='btn-genererlivrable-valider' disabled onclick="GenererLivrable()">Valider</button>
+        </div>
+      </div>
+      <div class="flex1"></div>
+    </div>
+     
+      
+      
+      
+   
+      
     <div id="container">
       <div class="container">
         <div id="nomProjet" onclick="display_manage_project()">
@@ -217,7 +237,7 @@
             />
             <span>Gestion bibliothèque</span>
           </label>
-          <button class="exportButton" id='btn-generer-livrable' onclick="GenererLivrable();">
+          <button class="exportButton" id='btn-generer-livrable' onclick="popupGenererLivrable(true);">
             <span>Générer livrable</span>
           </button>
         </div>
@@ -239,5 +259,17 @@
         </div>
       </div>
     </div>
+      <script>
+          $("#nomLivrableInput").on("keyup", function () {
+              if ($(this).val()) $("#btn-genererlivrable-valider").removeAttr('disabled');
+              else $("#btn-genererlivrable-valider").attr('disabled', '');
+          });
+          
+          $("#nomLivrableInput").on("keypress", function (evt) {
+              const touche = (evt.keyCode ? evt.keyCode : evt.which);
+              if ($(this).val() && touche == '13') $("#btn-genererlivrable-valider:enabled").trigger('click');
+          });
+          
+      </script>
   </body>
 </html>
