@@ -24,9 +24,12 @@
   </head>
   <body id="clientbody">
     <div class="flex1"></div>
-    <div id="error_notif" style="display: none;">
+    <div class="error_notif" id="error_notif" style="display: none;">
       <i class="fas fa-exclamation-triangle"></i> &nbsp; Erreur : identifiant /
       mot de passe incorrect(s)
+    </div>
+    <div class="error_notif" id="error_connexion" style="display: none;">
+      <i class="fas fa-exclamation-triangle"></i> &nbsp; Erreur de communication avec le serveur
     </div>
     <div id="conteneur_connection">
       <div class="titleLogin">
@@ -87,19 +90,26 @@
     url: "./ActionServlet",
     method: "GET",
     data: {
-      todo: "testConnexion",
+      todo: "testConnexion"
     },
-    dataType: "json",
+    dataType: "json"
   }).done(function (response) {
     // Fonction appelée en cas d'appel AJAX réussi
     if (!response.Error) {
       //Si déjà connecté alors on redirige vers son dashboard
       window.location.href = "Dashboard.html";
     }
+  }).fail((xhr) => {
+      console.log("Erreur dans la requête AJAX.");
+      console.log(xhr);
+      $("#error_connexion").css("display","block");
   });
 
   // Fonction appelée lors du clic sur le bouton de login
   function connexion() {
+    //On masque les erreurs
+    $(".error_notif").hide();
+     
     // Récupération de la valeur des champs du formulaire
     var emailField = $("#Email").val();
     var passwordField = $("#Password").val();
@@ -123,6 +133,10 @@
       } else {
         $("#error_notif").css("display", "block"); // Message pour le paragraphe de notification
       }
+    }).fail((xhr) => {
+        console.log("Erreur dans la requête AJAX.");
+        console.log(xhr);
+        $("#error_connexion").css("display","block");
     }).always(() => {
         $('#blogin_button').removeAttr('disabled');
         $('#blogin_button').html('Connexion'); 

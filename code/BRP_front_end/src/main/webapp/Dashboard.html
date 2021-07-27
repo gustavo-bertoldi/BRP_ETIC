@@ -28,11 +28,11 @@
       
     <div class="popUpWindow" id="popUpWindow-nouveauprojet">
       <div class="flex1"></div>
-      <div class="popupNomProjet">
+      <div class="popupContenu">
         <input type="text" id="nomProjetInput" placeholder="Nom du projet" />
         <div class="buttons">
           <button class="button" onclick="popUpNomProjet(false)">Annuler</button>
-          <button class="button" id='btn-creerprojet-valider' disabled>Valider</button>
+          <button class="button" id='btn-creerprojet-valider' onclick="createProject();" >Valider</button>
         </div>
       </div>
       <div class="flex1"></div>
@@ -41,7 +41,7 @@
      
     <div class="popUpWindow" id="popUpWindow-genererlivrable">
       <div class="flex1"></div>
-      <div class="popupNomLivrable">
+      <div class="popupContenu">
         <input type="text" id="nomLivrableInput" placeholder="Nom du fichier à télécharger" />
         <div class="buttons">
           <button class="button" onclick="popupGenererLivrable(false)">Annuler</button>
@@ -50,11 +50,18 @@
       </div>
       <div class="flex1"></div>
     </div>
-     
       
-      
-      
-   
+     <div class="popUpWindow" id="popUpWindow-supprimerprojet">
+      <div class="flex1"></div>
+      <div class="popupContenu">
+        <p class="popup-text">Confirmez-vous la suppression du projet  <span style="font-weight:bold;" id="SupprimerProjet-NomProjet"></span>  ?</p>
+        <div class="buttons">
+          <button class="button" onclick="popupSupprimerProjet(false)">Annuler</button>
+          <button class="button" id='btn-supprimerprojet-valider'>Supprimer</button>
+        </div>
+      </div>
+      <div class="flex1"></div>
+    </div>
       
     <div id="container">
       <div class="container">
@@ -260,6 +267,18 @@
       </div>
     </div>
       <script>
+          //Ajout d'événements aux boutons des popups créer projet
+          $("#nomProjetInput").on("keyup", function () {
+              if ($(this).val()) $("#btn-creerprojet-valider").removeAttr('disabled');
+              else $("#btn-creerprojet-valider").attr('disabled', '');
+          });
+          
+          $("#nomProjetInput").on("keypress", function (evt) {
+              const touche = (evt.keyCode ? evt.keyCode : evt.which);
+              if ($(this).val() && touche == '13') createProject();
+          });
+          
+          //Ajout d'événements aux boutons des popups générer livrable
           $("#nomLivrableInput").on("keyup", function () {
               if ($(this).val()) $("#btn-genererlivrable-valider").removeAttr('disabled');
               else $("#btn-genererlivrable-valider").attr('disabled', '');
@@ -267,9 +286,8 @@
           
           $("#nomLivrableInput").on("keypress", function (evt) {
               const touche = (evt.keyCode ? evt.keyCode : evt.which);
-              if ($(this).val() && touche == '13') $("#btn-genererlivrable-valider:enabled").trigger('click');
+              if ($(this).val() && touche == '13') $("#btn-genererlivrable-valider").trigger('click');
           });
-          
       </script>
   </body>
 </html>

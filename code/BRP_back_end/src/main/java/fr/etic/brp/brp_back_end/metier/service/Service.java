@@ -67,9 +67,8 @@ public class Service {
     
     //protected String rootXMLFiles = "../../../../../../../Projets/ETIC/Etude_BRP/code/BRP_front_end/src/main/webapp/XMLfiles/";
     //protected String rootXMLFiles = "../../../../code/BRP_front_end/src/main/webapp/XMLfiles/";
-    //protected String rootXMLFiles = "http://brpetude2.ddns.net:8085/BRP_front_end-1.0-SNAPSHOT/XMLfiles/";
+    protected String rootXMLFiles = "http://brpetude2.ddns.net:8085/BRP_front_end-1.0-SNAPSHOT/XMLfiles/";
     //protected String rootXMLFiles = "/usr/local/Cellar/tomcat/9.0.41/libexec/webapps/BRP_front_end-1.0-SNAPSHOT/XMLfiles/";
-    protected String rootXMLFiles = "C:\\Users\\brplyon\\Documents\\Gustavo - Debug\\BRP_ETIC\\code\\BRP_front_end\\src\\main\\webapp\\XMLfiles\\";
     
     
     
@@ -379,6 +378,25 @@ public class Service {
             JpaUtil.fermerContextePersistance();
         }
         return resultat;
+    }
+    
+     public boolean SupprimerProjet(Long id) {
+        boolean succes = false;
+        JpaUtil.creerContextePersistance();
+        
+        try {
+            Projet proj = projetDao.ChercherParId(id);
+            JpaUtil.ouvrirTransaction();
+            projetDao.Remove(proj);
+            JpaUtil.validerTransaction();
+          
+            succes = true;
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Le projet n°" + id + " n'a pas pu être supprime", e);
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return succes;
     }
     
     public CategorieConstruction RechercherCategorieConstructionParId(String id) {

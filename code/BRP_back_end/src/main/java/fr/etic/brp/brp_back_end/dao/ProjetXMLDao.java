@@ -32,7 +32,6 @@ public class ProjetXMLDao {
     
     public Document ObtenirDocument(String uri){
         Document xml = null;
-        System.out.println("uri -------- "+uri);
         try {
             DocumentBuilder builder = DomUtil.obtenirBuilder();
             //création de notre objet d'erreurs pour le XML
@@ -47,6 +46,8 @@ public class ProjetXMLDao {
     }
     
     public void saveXMLContent(Document xml, String uri){
+        System.out.println("saveXMLContent - uri : "+uri);
+        
         try {
             Transformer transformer = DomUtil.obtenirTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");

@@ -1,163 +1,166 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Inscription</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <head>
+        <title>Inscription</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-      crossorigin="anonymous"
-    />
+        <!-- Bootstrap CSS -->
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+            />
 
-    <link rel="stylesheet" type="text/css" href="style/style.css" />
+        <link rel="stylesheet" type="text/css" href="style/style.css" />
 
-    <!-- Librairie Javascript: jQuery (v3.4.1) -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  </head>
-  <script>
-    $.ajax({
-      url: "./ActionServlet",
-      method: "GET",
-      data: {
-        todo: "affichageAdmin",
-      },
-      dataType: "json",
-    }).done(function (response) {
-      if (!response.ErrorState) {
-        if (!response.isAdmin) {
-          //Si non admin alors on redirige vers la page de connexion
-          window.location.href = "index.html";
-        }
-      }
-    });
-  </script>
-  <body id="clientbody">
-    <div class="flex1"></div>
-    <div id="div_champs_inscription">
-      <div id="div_consigne" align="center">Formulaire d'inscription</div>
-      <br /><br />
-      <form action="#" id="inscriptionForm">
-        <div class="form-group">
-          <input
-            type="text"
-            class="fieldsLog"
-            id="LastName"
-            placeholder="Nom"
-          />
+        <!-- Librairie Javascript: jQuery (v3.4.1) -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script>
+            $.ajax({
+                url: "./ActionServlet",
+                method: "GET",
+                data: {
+                    todo: "affichageAdmin",
+                },
+                dataType: "json",
+            }).done(function (response) {
+                if (!response.ErrorState) {
+                    if (!response.isAdmin) {
+                        //Si non admin alors on redirige vers la page de connexion
+                        window.location.href = "index.html";
+                    }
+                }
+            });
+        </script>
+    </head>
+    <body id="clientbody">
+        <div class="flex1"></div>
+        <div id="div_champs_inscription">
+            <div id="div_consigne" align="center">Formulaire d'inscription</div>
+            <br /><br />
+            <form id="inscriptionForm">
+                <div class="form-group">
+                    <input
+                        type="text"
+                        class="fieldsLog"
+                        id="LastName"
+                        placeholder="Nom"
+                        />
+                </div>
+                <div class="form-group">
+                    <input
+                        type="text"
+                        class="fieldsLog"
+                        id="Email"
+                        placeholder="Adresse mail"
+                        />
+                </div>
+                <div class="form-group">
+                    <input
+                        type="password"
+                        class="fieldsLog"
+                        id="Password"
+                        placeholder="Mot de passe"
+                        />
+                </div>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary">
+                        <input
+                            type="radio"
+                            name="admin"
+                            id="admin"
+                            onclick="CheckAdmin();"
+                            />Administrateur
+                    </label>
+                    <label class="btn btn-secondary active">
+                        <input
+                            type="radio"
+                            name="operateur"
+                            id="operateur"
+                            onclick="CheckOperateur();"
+                            />Opérateur
+                    </label>
+                </div>
+                <div class="form-group" id="button_create_account">
+                    <button
+                        onclick="Inscription();"
+                        class="btn btn-primary"
+                        id="button_create_account_html"
+                        type="button"
+                        >
+                        Inscription
+                    </button>
+                    <button
+                        onclick="RetourDashboard();"
+                        class="btn btn-primary"
+                        id="button_back_home"
+                        type="button"
+                        >
+                        Retour
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-          <input
-            type="text"
-            class="fieldsLog"
-            id="Email"
-            placeholder="Adresse mail"
-          />
-        </div>
-        <div class="form-group">
-          <input
-            type="password"
-            class="fieldsLog"
-            id="Password"
-            placeholder="Mot de passe"
-          />
-        </div>
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="btn btn-secondary">
-            <input
-              type="radio"
-              name="admin"
-              id="admin"
-              onclick="CheckAdmin();"
-            />Administrateur
-          </label>
-          <label class="btn btn-secondary active">
-            <input
-              type="radio"
-              name="operateur"
-              id="operateur"
-              onclick="CheckOperateur();"
-            />Opérateur
-          </label>
-        </div>
-        <div class="form-group" id="button_create_account">
-          <button
-            onclick="Inscription();"
-            class="btn btn-primary"
-            id="button_create_account_html"
-          >
-            Inscription
-          </button>
-          <button
-            onclick="RetourDashboard();"
-            class="btn btn-primary"
-            id="button_back_home"
-          >
-            Retour
-          </button>
-        </div>
-      </form>
-    </div>
-    <div class="flex1"></div>
-  </body>
+        <div class="flex1"></div>
+        <script>
+            function CheckAdmin() {
+                $("#admin").parent().attr("class", "btn btn-secondary active");
+                $("#operateur").parent().attr("class", "btn btn-secondary");
+            }
+
+            function CheckOperateur() {
+                $("#admin").parent().attr("class", "btn btn-secondary");
+                $("#operateur").parent().attr("class", "btn btn-secondary active");
+            }
+
+            function Inscription() {
+                $("#div_consigne").html("Inscription..."); // Message pour le paragraphe de notification
+
+                // Récupération de la valeur des champs du formulaire
+                var lastNameField = $("#LastName").val();
+                var emailField = $("#Email").val();
+                var passwordField = $("#Password").val();
+                var isAdmin;
+                if ($(".active").children(":first").attr("id") == "admin")
+                    isAdmin = true;
+                else
+                    isAdmin = false;
+
+                $.ajax({
+                    url: "./ActionServlet",
+                    method: "POST",
+                    data: {
+                        todo: "inscription",
+                        lastName: lastNameField,
+                        email: emailField,
+                        password: passwordField,
+                        isAdmin: isAdmin,
+                    },
+                    dataType: "json",
+                })
+                        .done(function (response) {
+                            // Fonction appelée en cas d'appel AJAX réussi
+                            console.log("Response", response);
+                            if (!response.Error) {
+                                $("#div_consigne").html("Inscription bien prise en compte");
+                                $("#inscriptionForm").trigger("reset");
+                            } else {
+                                $("#div_consigne").html("Utilisateur déjà associé à ce mail");
+                                $("#Email").css("border-color", "red");
+                            }
+                        })
+                        .fail(function (error) {
+                            // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            console.log("Error", error); // LOG dans Console Javascript
+                            alert("Erreur lors de l'appel AJAX");
+                        });
+            }
+
+            function RetourDashboard() {
+                window.location.href = "Dashboard.html";
+            }
+        </script>
+    </body>
 </html>
-
-<script>
-  function CheckAdmin() {
-    $("#admin").parent().attr("class", "btn btn-secondary active");
-    $("#operateur").parent().attr("class", "btn btn-secondary");
-  }
-
-  function CheckOperateur() {
-    $("#admin").parent().attr("class", "btn btn-secondary");
-    $("#operateur").parent().attr("class", "btn btn-secondary active");
-  }
-
-  function Inscription() {
-    $("#div_consigne").html("Inscription..."); // Message pour le paragraphe de notification
-
-    // Récupération de la valeur des champs du formulaire
-    var lastNameField = $("#LastName").val();
-    var emailField = $("#Email").val();
-    var passwordField = $("#Password").val();
-    var isAdmin;
-    if ($(".active").children(":first").attr("id") == "admin") isAdmin = true;
-    else isAdmin = false;
-
-    $.ajax({
-      url: "./ActionServlet",
-      method: "POST",
-      data: {
-        todo: "inscription",
-        lastName: lastNameField,
-        email: emailField,
-        password: passwordField,
-        isAdmin: isAdmin,
-      },
-      dataType: "json",
-    })
-      .done(function (response) {
-        // Fonction appelée en cas d'appel AJAX réussi
-        console.log("Response", response);
-        if (!response.Error) {
-          $("#div_consigne").html("Inscription bien prise en compte");
-          $("#inscriptionForm").trigger("reset");
-        } else {
-          $("#div_consigne").html("Utilisateur déjà associé à ce mail");
-          $("#Email").css("border-color", "red");
-        }
-      })
-      .fail(function (error) {
-        // Fonction appelée en cas d'erreur lors de l'appel AJAX
-        console.log("Error", error); // LOG dans Console Javascript
-        alert("Erreur lors de l'appel AJAX");
-      });
-  }
-
-  function RetourDashboard() {
-    window.location.href = "Dashboard.html";
-  }
-</script>

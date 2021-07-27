@@ -19,7 +19,7 @@
     <class>fr.etic.brp.brp_back_end.metier.modele.Chapitre</class>
     <properties>
       <!-- <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/BD_BRP"/> PC QUENTIN -->
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3307/BD_BRP"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3307/bd_brp"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <!-- <property name="javax.persistence.jdbc.password" value="Password123@#!"/> -->  

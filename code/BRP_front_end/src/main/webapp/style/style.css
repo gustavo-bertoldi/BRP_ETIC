@@ -92,12 +92,16 @@
   margin-top: 1em;
 }
 
-#conteneur_button > button:hover:enabled {
+#conteneur_button > button:enabled:hover {
   cursor: pointer;
   background-color: var(--cta_hover);
 }
 
-#error_notif {
+.button:disabled {
+    opacity: 65%;
+}
+
+.error_notif {
   margin: auto;
   width: 800px;
   border-radius: 5px;
@@ -178,7 +182,7 @@ select {
   flex-direction: column;
 }
 
-.popupNomProjet, .popupNomLivrable {
+.popupContenu{
   margin: auto;
   background-color: var(--background_1);
   width: 500px;
@@ -187,7 +191,7 @@ select {
   padding: 40px 30px 40px;
 }
 
-.popupNomProjet > .buttons, .popupNomLivrable > .buttons {
+.popupContenu > .buttons {
   display: flex;
 }
 
@@ -231,14 +235,20 @@ select {
     border: none;
 }
 
-.popupNomProjet > .buttons > .button:nth-child(1),
-.popupNomLivrable > .buttons > .button:nth-child(1) {
+.popupContenu > .buttons > .button:nth-child(1) {
   margin-right: 2.5%;
 }
 
-.popupNomProjet > .buttons > .button:nth-child(2),
-.popupNomLivrable > .buttons > .button:nth-child(2) {
+.popupContenu > .buttons > .button:nth-child(2) {
   margin-left: 2.5%;
+}
+
+#btn-supprimerprojet-valider:enabled:hover {
+    background: rgba(255,0,0,0.6);
+}
+
+p.popup-text {
+    text-align: center;
 }
 
 /*      Partie Gauche       */
@@ -924,3 +934,14 @@ highlightmagenta {
 highlightgrey {
   background-color: #d3d3d3;
 }
+
+.suppr-projet-svg {
+    fill: var(--border);
+    margin: auto;
+    margin-left: 15px;
+}
+
+.suppr-projet-svg:hover {
+    fill: red;
+}
+

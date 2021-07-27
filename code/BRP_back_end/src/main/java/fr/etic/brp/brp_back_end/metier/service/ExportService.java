@@ -57,12 +57,13 @@ public class ExportService {
     protected ProjetDao projetDao = new ProjetDao();
     
     //protected String rootXMLFiles = "../../../../code/BRP_front_end/src/main/webapp/XMLfiles/";
-    protected String rootXMLFiles = "C:\\Users\\brplyon\\Documents\\Gustavo - Debug\\BRP_ETIC\\code\\BRP_front_end\\target\\BRP_front_end-1.0-SNAPSHOT\\XMLfiles"; 
-    //protected String rootXMLFiles = "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/XMLfiles/"; 
+    //protected String rootXMLFiles = "C:\\Users\\brplyon\\Documents\\Gustavo - Debug\\BRP_ETIC\\code\\BRP_front_end\\target\\BRP_front_end-1.0-SNAPSHOT\\XMLfiles"; 
+    protected String rootXMLFiles = "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/XMLfiles/"; 
     //protected String rootXMLFiles = "/usr/local/Cellar/tomcat/9.0.41/libexec/webapps/BRP_front_end-1.0-SNAPSHOT/XMLfiles/";
 
     //protected String rootExportFiles = "/usr/local/Cellar/tomcat/9.0.41/libexec/webapps/BRP_front_end-1.0-SNAPSHOT/export_files/";
-    protected String rootExportFiles = "C:\\Users\\brplyon\\Documents\\Gustavo - Debug\\BRP_ETIC\\code\\BRP_front_end\\src\\main\\webapp\\export_files\\";
+    //protected String rootExportFiles = "C:\\Users\\brplyon\\Documents\\Gustavo - Debug\\BRP_ETIC\\code\\BRP_front_end\\src\\main\\webapp\\export_files\\";
+    protected String rootExportFiles = "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/export_files/";
 
     private final static TreeMap<Integer, String> map = new TreeMap<Integer, String>();
     static {
@@ -93,10 +94,7 @@ public class ExportService {
        
         DomUtil.init();
         ArrayList<String> resultat = new ArrayList<>();
-      
-        
-        System.out.println("URI XML 2222 ------- "+uriXML);
-        
+
         Map<String, String> template1 = new HashMap<>();
         template1.put("titre1", "Titre1");
         template1.put("titre2", "Titre2");
@@ -109,8 +107,6 @@ public class ExportService {
         //Utile quand on veut RM le dossier si erreur
         String nomProjet = null;
         Boolean dossierCree = false;
-        
-        System.out.println("Dossier -- - - - - "+rootExportFiles+"Exports/"+ "" + "_" + idProjet);
 
         try {
             //Obtention du document XML
@@ -118,8 +114,11 @@ public class ExportService {
             
             //On insère les infos projets dans le XML
             JpaUtil.creerContextePersistance();
+            
             Projet projet = projetDao.ChercherParId(idProjet);
+            
             JpaUtil.fermerContextePersistance();
+            
             Element baliseNomprojet = xml.createElement("nomProjet");
             baliseNomprojet.setTextContent(projet.getNomProjet());
             Element baliseTypeMarche = xml.createElement("typeMarche");
@@ -193,7 +192,7 @@ public class ExportService {
             
             File index = new File(rootExportFiles+"Exports/"+ nomProjet + "_" + idProjet);
             if(index.exists()){
-                String[]entries = index.list();
+                String[] entries = index.list();
                 for(String s: entries){
                     File currentFile = new File(index.getPath(),s);
                     currentFile.delete();
@@ -202,9 +201,10 @@ public class ExportService {
             }
 
             //On créer le dossier d'export du Projet
-            Boolean succesCreationDossier = (new File(rootExportFiles+"Exports/"+ nomProjet + "_" + idProjet)).mkdirs();
+            final String cheminNouveauDossier = rootExportFiles+"Exports/"+ nomProjet + "_" + idProjet;
+            Boolean succesCreationDossier = (new File(cheminNouveauDossier)).mkdirs();
             if (!succesCreationDossier) {
-                throw new Exception();
+                throw new Exception("ExporterProjet - Echec lors de la création du dossier "+cheminNouveauDossier);
             }
 
             // Boolean succesCreationDossier = false;

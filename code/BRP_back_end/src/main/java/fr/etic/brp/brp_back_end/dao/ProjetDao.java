@@ -18,8 +18,7 @@ public class ProjetDao {
     }
     
     public Projet ChercherParId(Long idProjet) {
-        EntityManager em = JpaUtil.obtenirContextePersistance();
-        return em.find(Projet.class, idProjet); // renvoie null si l'identifiant n'existe pas
+        return JpaUtil.obtenirContextePersistance().find(Projet.class, idProjet); // renvoie null si l'identifiant n'existe pas
     }
     
     public List<Projet> ListerProjets() {
@@ -43,7 +42,6 @@ public class ProjetDao {
     }
     
     public void Remove(Projet projet) {
-        EntityManager em = JpaUtil.obtenirContextePersistance();
-        em.remove(projet);
+        JpaUtil.obtenirContextePersistance().remove(projet);
     }
 }

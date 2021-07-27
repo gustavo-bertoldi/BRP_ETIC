@@ -1,5 +1,7 @@
 
 
+
+
 /*************** Variables globales ******************/
 
 test_select_descriptif = false; //permet de ne pas supprimer la selection d'un element à peine faite
@@ -198,6 +200,20 @@ $(document).ready(function () {
 
 /****************** Fonctions (popup) *********************/
 
+function popupSupprimerProjet(afficher, nomProjet, idProjet) {
+    
+    if (afficher) {
+        $("#btn-supprimerprojet-valider").on("click", () => {supprimerProjet(idProjet);});
+        $("#SupprimerProjet-NomProjet").html(nomProjet);
+        $("#popUpWindow-supprimerprojet").css("display", "flex");
+        $("#container").css("filter", "blur(5px)");
+    } else {
+        $("#popUpWindow-supprimerprojet").hide();
+        $("#btn-supprimerprojet-valider").off("click");
+        $("#container").css("filter", "blur(0px)");
+    }
+    
+}
 
 function popupGenererLivrable(afficher) {
     if (afficher) {
@@ -213,7 +229,7 @@ function popupGenererLivrable(afficher) {
 function popUpNomProjet(sens, idProjet) {
   //On supprime les anciens events attachés aux boutons
   $(".popupNomProjet > .buttons > .button").off("click");
-
+  $("#btn-creerprojet-valider").attr("disabled","");
   //on le montre
   if (sens) {
     $("#popUpWindow-nouveauprojet").css("display", "flex");
@@ -242,9 +258,8 @@ function popUpNomProjet(sens, idProjet) {
 /****************** Fonctions (partie gauche) *********************/
 function createProject() {
   var nomProjet = $("#nomProjetInput").val();
+  $('#btn-creerprojet-valider').attr("disabled","");
   $('#btn-creerprojet-valider').html('Chargement ... ');
-  $('#btn-creerprojet-valider').attr('disabled','');
-
   $.ajax({
     url: "./ActionServlet",
     method: "POST",
@@ -269,6 +284,7 @@ function createProject() {
         $('#btn-creerprojet-valider').html('Valider');
         $('#btn-creerprojet-valider').removeAttr('disabled');
         popUpNomProjet(false);
+        location.reload();
       }, delayInMilliseconds);
     }
   });
@@ -278,25 +294,29 @@ function searchProjet() {
   var morceauNom = $("#search_input").val();
   $("#containerLineProjet").html("");
   for (var i = listeProjets.length-1; i >= 0; i--) {
+      const id = listeProjets[i].id;
+      const nom = listeProjets[i]["nom"];
     //si le morceau du nom se trouve bien dans le nom du projet, on l'affiche
     if (morceauNom == null || listeProjets[i]["nom"].includes(morceauNom)) {
       $("#containerLineProjet").append(
         '<div class="lineProjet">\
         <input type="hidden" class="idProjet" value="' +
-          listeProjets[i].id +
+          id +
           '">\
               <div class="textLineProjet">\
                 <div class="iconProjet"><i class="far fa-file-alt"></i></div>\
                 <div class="propositionNomProjet">' +
-          listeProjets[i]["nom"] +
-          '</div>\
-              </div>\
-              <select class="actionProjet">\
-                <option value="ouvrir">Ouvrir</option>\
-                <option value="dupliquer">Dupliquer</option>\
-              </select>\
-            </div>'
+          nom +
+          `</div>
+              </div>
+              <select class="actionProjet">
+                <option value="ouvrir">Ouvrir</option>
+                <option value="dupliquer">Dupliquer</option>
+              </select>
+              <svg class="suppr-projet-svg" id="icn-suppr-projet-${id}" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M19 24h-14c-1.104 0-2-.896-2-2v-17h-1v-2h6v-1.5c0-.827.673-1.5 1.5-1.5h5c.825 0 1.5.671 1.5 1.5v1.5h6v2h-1v17c0 1.104-.896 2-2 2zm0-19h-14v16.5c0 .276.224.5.5.5h13c.276 0 .5-.224.5-.5v-16.5zm-9 4c0-.552-.448-1-1-1s-1 .448-1 1v9c0 .552.448 1 1 1s1-.448 1-1v-9zm6 0c0-.552-.448-1-1-1s-1 .448-1 1v9c0 .552.448 1 1 1s1-.448 1-1v-9zm-2-7h-4v1h4v-1z"/></svg>
+            </div>`
       );
+       $("#icn-suppr-projet-"+id).on('click', () => popupSupprimerProjet(true,nom,id));
     }
   }
   //Attache l'event pour Ouvrir ou Dupliquer
@@ -305,14 +325,38 @@ function searchProjet() {
   });
 }
 
+function supprimerProjet(id) {
+    $("#btn-supprimerprojet-valider").attr("disabled","");
+    $("#btn-supprimerprojet-valider").html("Suppression ... ");
+    $("#btn-supprimerprojet-valider").off("click");
+    $.ajax({
+        url: "./ActionServlet",
+        method: "POST",
+        data: {
+            todo: "supprimerProjet",
+            idProjet: id
+        },
+        dataType: "json"
+    }).done((response) => {
+        if (response.ErrorState) console.log("Supprimer projet - Erreur lors de la suppression du projet");
+        location.reload();
+    }).fail((xhr) => {
+       console.log("Supprimer projet - Erreur de communication avec le serveur");
+       console.log(xhr);
+    }).always(() => {
+        $("#btn-supprimerprojet-valider").removeAttr("disabled");
+        $("#btn-supprimerprojet-valider").html("Supprimer");
+    });
+}
+
 function getProjets() {
   $.ajax({
     url: "./ActionServlet",
     method: "POST",
     data: {
-      todo: "chercherProjet",
+      todo: "chercherProjet"
     },
-    dataType: "json",
+    dataType: "json"
   }).done(function (response) {
     // Fonction appelée en cas d'appel AJAX réussi
     //console.log("Response", response);
@@ -626,9 +670,9 @@ function modifierInfosProjet() {
         idCoeffRaccordement: idCoeffRaccordement,
         idCategorieConstruction: idCategorieConstruction,
         idSousCategorieConstruction: idSousCategorieConstruction,
-        idCaractDim: idCaractDim,
+        idCaractDim: idCaractDim
       },
-      dataType: "json",
+      dataType: "json"
     }).done(function (response) {
       // Fonction appelée en cas d'appel AJAX réussi
       //console.log("Response", response);
@@ -884,7 +928,7 @@ function GenererLivrable() {
   //   idProjet +
   //   ".xml";
   var uriXML =
-    "C:\\Users\\brplyon\\Documents\\Gustavo - Debug\\BRP_ETIC\\code\\BRP_front_end\\src\\main\\webapp\\XMLfiles\\" +
+    "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/XMLfiles/" +
     idProjet +
     ".xml";
   
@@ -983,18 +1027,12 @@ function editerDescription(id) {
     ["</highlightcyan>", "</span>"],
     ["<highlightred>", '<span style="background-color: rgb(255, 0, 0);">'],
     ["</highlightred>", "</span>"],
-    [
-      "<highlightgreen>",
-      '<span style="background-color: rgb(144, 238, 144);">',
-    ],
+    ["<highlightgreen>", '<span style="background-color: rgb(144, 238, 144);">'],
     ["</highlightgreen>", "</span>"],
-    [
-      "<highlightmagenta>",
-      '<span style="background-color: rgb(255, 0, 255);">',
-    ],
+    ["<highlightmagenta>", '<span style="background-color: rgb(255, 0, 255);">'],
     ["</highlightmagenta>", "</span>"],
     ["<highlightgrey>", '<span style="background-color: rgb(211, 211, 211);">'],
-    ["</highlightgrey>", "</span>"],
+    ["</highlightgrey>", "</span>"]
   ];
 
   var htmlText = $(".description" + id).html();
@@ -1427,6 +1465,8 @@ function AjouterElement(element) {
       testChoixPresent = true;
     }
   } else {
+      
+      
     //Sinon on propose d'insérer un titre du même niveau d'arboresence que le titre d'au-dessus ou de celui d'en-dessous sous réserve d'existence
     var type1 = null;
     var type2 = null;
@@ -1434,6 +1474,17 @@ function AjouterElement(element) {
     var type4 = null;
     var prev = $(element).prev();
     var next = $(element).next();
+    let niveau;
+    
+    //Récupère le niveau dans l'arborescence 
+    if (!prev) niveau = 1;
+    else if (prev.hasClass("titre1")) niveau = 1;
+    else if (prev.hasClass("titre2")) niveau = 2;
+    else if (prev.hasClass("titre3")) niveau = 3;
+    else if (prev.hasClass("titre4")) niveau = 4;
+    else niveau = null;
+     
+    
     if (prev !== null) {
       if (prev.hasClass("titre1")) {
         type1 = "titre1";
