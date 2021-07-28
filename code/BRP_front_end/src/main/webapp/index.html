@@ -74,7 +74,6 @@
 <script>
     //Désactive le bouton si les champs utilisateur et mdp n'ont pas été saisis
   $('div.form-group input').on('keyup', function () {
-      console.log($('#Email').val());
       if ($('#Email').val() && $('#Password').val()) $('#blogin_button').removeAttr('disabled');
       else $('#blogin_button').attr('disabled','');
   });

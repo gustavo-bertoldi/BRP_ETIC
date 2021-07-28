@@ -928,7 +928,7 @@ function GenererLivrable() {
   //   idProjet +
   //   ".xml";
   var uriXML =
-    "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/XMLfiles/" +
+    "/usr/local/tomcat/webapps/BRP_editeur_rapports/XMLfiles/" +
     idProjet +
     ".xml";
   

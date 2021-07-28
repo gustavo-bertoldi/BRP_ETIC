@@ -57,7 +57,7 @@ public class ImportService {
     
     //protected String rootImportFiles = "../../../../code/BRP_front_end/src/main/webapp/import_files/";
     //protected String rootImportFiles = "../../../../../../../Projets/ETIC/Etude_BRP/code/BRP_front_end/src/main/webapp/import_files/";
-    protected String rootImportFiles = "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/import_files/";
+    protected String rootImportFiles = "/usr/local/tomcat/webapps/BRP_editeur_rapports/import_files/";
     //protected String rootImportFiles = "/usr/local/Cellar/tomcat/9.0.41/libexec/webapps/BRP_front_end-1.0-SNAPSHOT/import_files/";
     
     public ArrayList<String> ModifBaseDescriptif(String nameWord){

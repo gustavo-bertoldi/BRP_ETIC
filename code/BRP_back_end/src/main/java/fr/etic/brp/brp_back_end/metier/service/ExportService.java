@@ -58,12 +58,12 @@ public class ExportService {
     
     //protected String rootXMLFiles = "../../../../code/BRP_front_end/src/main/webapp/XMLfiles/";
     //protected String rootXMLFiles = "C:\\Users\\brplyon\\Documents\\Gustavo - Debug\\BRP_ETIC\\code\\BRP_front_end\\target\\BRP_front_end-1.0-SNAPSHOT\\XMLfiles"; 
-    protected String rootXMLFiles = "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/XMLfiles/"; 
+    protected String rootXMLFiles = "/usr/local/tomcat/webapps/BRP_editeur_rapports/XMLfiles/";
     //protected String rootXMLFiles = "/usr/local/Cellar/tomcat/9.0.41/libexec/webapps/BRP_front_end-1.0-SNAPSHOT/XMLfiles/";
 
     //protected String rootExportFiles = "/usr/local/Cellar/tomcat/9.0.41/libexec/webapps/BRP_front_end-1.0-SNAPSHOT/export_files/";
     //protected String rootExportFiles = "C:\\Users\\brplyon\\Documents\\Gustavo - Debug\\BRP_ETIC\\code\\BRP_front_end\\src\\main\\webapp\\export_files\\";
-    protected String rootExportFiles = "http://brpetude2.ddns.net:8080/BRP_front_end-1.0-SNAPSHOT/export_files/";
+    protected String rootExportFiles = "/usr/local/tomcat/webapps/BRP_editeur_rapports/export_files/";
 
     private final static TreeMap<Integer, String> map = new TreeMap<Integer, String>();
     static {
@@ -342,7 +342,7 @@ public class ExportService {
                     }
                 }
                 //On nomme la CCTP
-                String outputCCTP = rootExportFiles+"Exports\\" + projet.getNomProjet() + "_" + projet.getIdProjet() + "\\" + projet.getNomProjet() + "_LOT_" + h + "_" + baliseLot.getAttribute("intitule") + ".docx"; //Surement à changer lors de l'installation client
+                String outputCCTP = rootExportFiles+"Exports/" + projet.getNomProjet() + "_" + projet.getIdProjet() + "/" + projet.getNomProjet() + "_LOT_" + h + "_" + baliseLot.getAttribute("intitule") + ".docx"; //Surement à changer lors de l'installation client
                 //On écrit en sortie le document WORD
                 FileOutputStream out = new FileOutputStream(outputCCTP);
                 word.write(out);
@@ -722,7 +722,7 @@ public class ExportService {
             //FIN //NB : (PAS après "Fait à" inclus)
             
             //On nomme la DPGF
-            String outputDPGF = rootExportFiles+"Exports\\" + projet.getNomProjet() + "_" + projet.getIdProjet() + "\\" + projet.getNomProjet() + "_DPGF.xlsx"; //Surement à changer lors de l'installation client
+            String outputDPGF = rootExportFiles+"Exports/" + projet.getNomProjet() + "_" + projet.getIdProjet() + "/" + projet.getNomProjet() + "_DPGF.xlsx"; //Surement à changer lors de l'installation client
 
             //On écrit en sortie le document EXCEL
             OutputStream fileOut = new FileOutputStream(outputDPGF);

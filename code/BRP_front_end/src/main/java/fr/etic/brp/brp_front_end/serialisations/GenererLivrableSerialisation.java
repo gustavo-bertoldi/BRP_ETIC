@@ -29,9 +29,9 @@ public class GenererLivrableSerialisation extends Serialisation {
         ArrayList<String> fichiers = (ArrayList<String>)request.getAttribute("fichiers");
         if (fichiers == null || fichiers.isEmpty()) return;
         
-        final String cheminDossier = fichiers.get(0).substring(0, fichiers.get(0).lastIndexOf("\\"));
+        final String cheminDossier = fichiers.get(0).substring(0, fichiers.get(0).lastIndexOf("/"));
         final String nomFichier = "livrables.zip";
-        final String cheminLivrable = cheminDossier + "\\" + nomFichier;
+        final String cheminLivrable = cheminDossier + "/" + nomFichier;
         final int STREAM_SIZE = 1024;
         
         try (FileOutputStream fos = new FileOutputStream(cheminLivrable);

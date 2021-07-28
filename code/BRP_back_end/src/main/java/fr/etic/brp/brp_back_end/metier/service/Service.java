@@ -32,6 +32,7 @@ import fr.etic.brp.brp_back_end.metier.modele.Prestation;
 import fr.etic.brp.brp_back_end.metier.modele.Projet;
 import fr.etic.brp.brp_back_end.metier.modele.SousCategorieConstruction;
 import fr.etic.brp.brp_back_end.metier.modele.SousFamille;
+import java.io.File;
 import static java.lang.Long.parseLong;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -67,7 +68,7 @@ public class Service {
     
     //protected String rootXMLFiles = "../../../../../../../Projets/ETIC/Etude_BRP/code/BRP_front_end/src/main/webapp/XMLfiles/";
     //protected String rootXMLFiles = "../../../../code/BRP_front_end/src/main/webapp/XMLfiles/";
-    protected String rootXMLFiles = "http://brpetude2.ddns.net:8085/BRP_front_end-1.0-SNAPSHOT/XMLfiles/";
+    protected String rootXMLFiles =  "/usr/local/tomcat/webapps/BRP_editeur_rapports/XMLfiles/";
     //protected String rootXMLFiles = "/usr/local/Cellar/tomcat/9.0.41/libexec/webapps/BRP_front_end-1.0-SNAPSHOT/XMLfiles/";
     
     
@@ -390,7 +391,10 @@ public class Service {
             projetDao.Remove(proj);
             JpaUtil.validerTransaction();
           
-            succes = true;
+            //Suppression des fichiers locaux
+            File fic = new File("/usr/local/tomcat/webapps/BRP_editeur_rapports/XMLfiles/"+id+".xml");
+            if (fic.delete()) succes = true;
+            
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Le projet n°" + id + " n'a pas pu être supprime", e);
         } finally {
